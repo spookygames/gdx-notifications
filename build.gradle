@@ -1,0 +1,32 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0-alpha2'
+    }
+}
+
+allprojects {
+
+    apply plugin: 'eclipse'
+
+    group = 'net.spookygames.gdx'
+    version = '0.0.1'
+
+    ext {
+        gdxVersion = '1.5.5'
+        libName = 'gdx-notifications'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
+subprojects {
+    eclipse.project.name = "$libName-$name"
+}
