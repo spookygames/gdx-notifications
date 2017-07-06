@@ -25,8 +25,22 @@ package net.spookygames.gdx.notifications;
 
 public interface NotificationHandler {
 
+	/**
+	 * Trigger a new notification with given parameters.
+	 * 
+	 * @param parameters
+	 *            Mandatory notification parameters, cannot be null
+	 */
 	void showNotification(NotificationParameters parameters);
 
+	/**
+	 * Hide notification with given parameters. Will most probably use the id
+	 * property to properly identify the notification searched for but as most
+	 * things there are platform-dependent nothing is guaranteed for sure.
+	 * 
+	 * @param parameters
+	 *            Mandatory notification parameters, cannot be null
+	 */
 	void hideNotification(NotificationParameters parameters);
 
 }

@@ -25,9 +25,26 @@ package net.spookygames.gdx.notifications;
 
 public class NotificationParameters {
 
+	/**
+	 * Notification id, utility may depend on context. Defaults to 19161107
+	 * which doesn't mean a thing.
+	 */
 	public int id = 19161107;
+
+	/**
+	 * Notification title, most probably important.
+	 */
 	public String title;
+
+	/**
+	 * Notification content, probably important.
+	 */
 	public String text;
+
+	/**
+	 * Arbitrary payload to append to a notification. Absolutely
+	 * context-dependent.
+	 */
 	public Object payload;
 
 }
