@@ -1,0 +1,54 @@
+
+apply plugin: 'java'
+apply plugin: 'robovm'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    compile project(':core')
+    compile "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
+    compile "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
+}
+
+apply plugin: 'maven-publish'
+
+archivesBaseName = "$libName-${project.name}"
+
+// Javadoc
+task javadocJar (type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// Sources
+task sourcesJar (type : Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId "$libName-${project.name}"
+            from components.java
+
+            artifact sourcesJar
+			artifact javadocJar
+        }
+    }
+}
+
+apply from: '../license.gradle'
+license.includes(["**/*.java"])
+
+apply from: '../publish.gradle'
+bintray.publications = ['maven']
+bintrayUpload.dependsOn publishToMavenLocal
