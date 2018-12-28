@@ -1,25 +1,26 @@
+import com.android.builder.core.BuilderConstants
 
 plugins {
-  id "com.github.dcendents.android-maven" version "1.5"
+    id "com.github.dcendents.android-maven" version "2.1"
 }
 
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 23
+        targetSdkVersion 28
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
     }
-    
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -45,13 +46,13 @@ task javadoc(type: Javadoc) {
 }
 
 // Javadoc
-task javadocJar (type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
 // Sources
-task sourcesJar (type : Jar) {
+task sourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.srcDirs
 }
@@ -59,13 +60,13 @@ task sourcesJar (type : Jar) {
 // Thanks to http://stackoverflow.com/questions/19307341/android-library-gradle-release-jar
 android.libraryVariants.all { variant ->
     def name = variant.buildType.name
-    if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
-        return; // Skip debug builds.
+    if (name.equals(BuilderConstants.DEBUG)) {
+        return // Skip debug builds.
     }
     def task = project.tasks.create "jar${name.capitalize()}", Jar
     task.dependsOn variant.javaCompile
     task.from variant.javaCompile.destinationDir
-    artifacts.add('archives', task);
+    artifacts.add('archives', task)
 }
 
 artifacts {
@@ -86,13 +87,13 @@ eclipse {
     }
 
     classpath {
-        plusConfigurations += [ project.configurations.compile ]        
-        containers 'org.eclipse.andmore.ANDROID_FRAMEWORK', 'org.eclipse.andmore.LIBRARIES'       
+        plusConfigurations += [project.configurations.compile]
+        containers 'org.eclipse.andmore.ANDROID_FRAMEWORK', 'org.eclipse.andmore.LIBRARIES'
     }
 
     project {
         natures 'org.eclipse.andmore.AndroidNature'
-        buildCommands.clear();
+        buildCommands.clear()
         buildCommand "org.eclipse.andmore.PreCompilerBuilder"
         buildCommand "org.eclipse.jdt.core.javabuilder"
         buildCommand "org.eclipse.andmore.ApkBuilder"
@@ -108,13 +109,13 @@ bintrayUpload.dependsOn build
 
 task createPom {
     doLast {
-    pom {
-        project {
-            packaging 'aar'
-            artifactId project.archivesBaseName
+        pom {
+            project {
+                packaging 'aar'
+                artifactId project.archivesBaseName
+            }
         }
-    }
-    .writeTo("$buildDir/poms/pom-default.xml")
+        .writeTo("$buildDir/poms/pom-default.xml")
     }
 }
 build.dependsOn createPom
