@@ -23,8 +23,7 @@
  */
 package net.spookygames.gdx.notifications.desktop;
 
-import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
-
+import lombok.NonNull;
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
 import notify.MessageType;
@@ -39,13 +38,8 @@ public class DesktopNotificationHandler implements NotificationHandler {
 	}
 
 	@Override
-	public void showNotification(NotificationParameters parameters) {
-
-		checkNotNull(parameters, "parameters");
-		checkNotNull(parameters.title, "parameters.title");
-		checkNotNull(parameters.text, "parameters.text");
-		
-		notifier.notify(defineMessageType(parameters), parameters.title, parameters.text);
+	public void showNotification(@NonNull NotificationParameters parameters) {
+		notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
 	}
 
 	@Override
@@ -58,12 +52,10 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		NotificationHandler handler = new DesktopNotificationHandler();
 		
 		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters();
+			NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum");
 			
-			parameters.id = i;
-			parameters.title = "Notification " + i;
-			parameters.text = "Lorem ipsum";
-			parameters.payload = types[i % types.length];
+			parameters.setId(i);
+			parameters.setPayload(types[i % types.length]);
 			
 			handler.showNotification(parameters);
 		}
@@ -75,18 +67,18 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		}
 		
 		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters();
+			NotificationParameters parameters = new NotificationParameters("", "");
 			
-			parameters.id = i;
+			parameters.setId(i);
 			
 			handler.hideNotification(parameters);
 		}
 		
 	}
 	
-	protected MessageType defineMessageType(NotificationParameters parameters) {
-		Object payload = parameters.payload;
-		if(payload != null && payload instanceof MessageType)
+	protected MessageType defineMessageType(@NonNull NotificationParameters parameters) {
+		Object payload = parameters.getPayload();
+		if(payload instanceof MessageType)
 			return (MessageType) payload;
 		
 		return MessageType.NONE;

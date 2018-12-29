@@ -23,18 +23,15 @@
  */
 package net.spookygames.gdx.notifications.android;
 
-import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
-
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import lombok.NonNull;
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
-//import net.spookygames.gdx.notifications.android.R;
-import android.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AndroidNotificationHandler implements NotificationHandler {
@@ -48,36 +45,25 @@ public class AndroidNotificationHandler implements NotificationHandler {
 	}
 
 	@Override
-	public void showNotification(NotificationParameters parameters) {
-		checkNotNull(parameters, "parameters");
+	public void showNotification(@NonNull NotificationParameters parameters) {
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"19161107");
 
-		Builder builder = new Builder(context);
-		
 		decorate(builder, parameters);
-		
-		@SuppressWarnings("deprecation")
-		Notification notification = builder.getNotification();	// build() is only available starting from Jelly Bean
 
-		int notificationId = parameters.id;
-
-		manager.notify(notificationId, notification);
+		manager.notify(parameters.getId(), builder.build());
 	}
 
 	@Override
 	public void hideNotification(NotificationParameters parameters) {
-		manager.cancel(parameters.id);
+		manager.cancel(parameters.getId());
 	}
 
-	protected void decorate(Builder builder, NotificationParameters parameters) {
-		checkNotNull(parameters.title, "parameters.title");
-		checkNotNull(parameters.text, "parameters.text");
-		
+	protected void decorate(NotificationCompat.Builder builder, @NonNull NotificationParameters parameters) {
 		builder
 			.setDefaults(Notification.DEFAULT_ALL)
-			.setContentTitle(parameters.title)
-			.setContentText(parameters.text)
-			.setSmallIcon(R.drawable.ic_dialog_info) // Should have been local ic_launcher, really, so please FIXME gradle build
-				;
+			.setContentTitle(parameters.getTitle())
+			.setContentText(parameters.getText())
+			.setSmallIcon(android.R.drawable.ic_dialog_info); // Should have been local ic_launcher, really, so please FIXME gradle build
 	}
 
 }

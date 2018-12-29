@@ -34,8 +34,11 @@ targetCompatibility = 1.6
 project.archivesBaseName = "$libName-${project.name}"
 
 dependencies {
-    compile project(':core')
-    compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    implementation project(':core')
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    compileOnly "org.projectlombok:lombok:1.18.4"
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    implementation "com.android.support:support-compat:28.0.0"
 }
 
 task javadoc(type: Javadoc) {
@@ -60,7 +63,7 @@ task sourcesJar(type: Jar) {
 // Thanks to http://stackoverflow.com/questions/19307341/android-library-gradle-release-jar
 android.libraryVariants.all { variant ->
     def name = variant.buildType.name
-    if (name.equals(BuilderConstants.DEBUG)) {
+    if (name == BuilderConstants.DEBUG) {
         return // Skip debug builds.
     }
     def task = project.tasks.create "jar${name.capitalize()}", Jar

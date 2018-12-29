@@ -23,28 +23,34 @@
  */
 package net.spookygames.gdx.notifications;
 
+import lombok.Data;
+import lombok.NonNull;
+
+@Data
 public class NotificationParameters {
 
 	/**
 	 * Notification id, utility may depend on context. Defaults to 19161107
 	 * which doesn't mean a thing.
 	 */
-	public int id = 19161107;
+	private int id = 19161107;
 
 	/**
 	 * Notification title, most probably important.
 	 */
-	public String title;
+	@NonNull
+	private String title;
 
 	/**
 	 * Notification content, probably important.
 	 */
-	public String text;
+	@NonNull
+	private String text;
 
 	/**
 	 * Arbitrary payload to append to a notification. Absolutely
 	 * context-dependent.
 	 */
-	public Object payload;
+	private Object payload;
 
 }

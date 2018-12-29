@@ -24,7 +24,6 @@
 package net.spookygames.gdx.notifications.desktop;
 
 import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
-import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -44,12 +43,13 @@ import com.theme.TextTheme;
 import com.theme.WindowTheme;
 import com.utils.Time;
 
+import lombok.NonNull;
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
 
 public class DesktopNotificationHandler implements NotificationHandler {
 	
-	private final IntMap<Notification> notifications = new IntMap<Notification>();
+	private final IntMap<Notification> notifications = new IntMap<>();
 	
 	private final NotificationManager manager;
 
@@ -71,12 +71,7 @@ public class DesktopNotificationHandler implements NotificationHandler {
 	}
 
 	@Override
-	public void showNotification(NotificationParameters parameters) {
-
-		checkNotNull(parameters, "parameters");
-		checkNotNull(parameters.title, "parameters.title");
-		checkNotNull(parameters.text, "parameters.text");
-		
+	public void showNotification(@NonNull NotificationParameters parameters) {
 		// Creates a text notification
 		TextNotification notification = new TextNotification() {
 			@Override
@@ -88,8 +83,8 @@ public class DesktopNotificationHandler implements NotificationHandler {
 
 		notification.setWindowTheme(windowTheme);
 		notification.setTextTheme(textTheme);
-		notification.setTitle(parameters.title);
-		notification.setSubtitle(parameters.text);
+		notification.setTitle(parameters.getTitle());
+		notification.setSubtitle(parameters.getText());
 		
 		notification.setCloseOnClick(true);
 		notification.addNotificationListener(new NotificationListener() {
@@ -109,18 +104,15 @@ public class DesktopNotificationHandler implements NotificationHandler {
 			}
 		});
 		
-		notifications.put(parameters.id, notification);
+		notifications.put(parameters.getId(), notification);
 		
 		// The notification will disappear after 2 seconds, or after you click it 
-		manager.addNotification(notification, Time.seconds(2));
+		manager.addNotification(notification, Time.seconds(10));
 	}
 
 	@Override
-	public void hideNotification(NotificationParameters parameters) {
-		
-		checkNotNull(parameters, "parameters");
-		
-		Notification notification = notifications.get(parameters.id);
+	public void hideNotification(@NonNull NotificationParameters parameters) {
+		Notification notification = notifications.get(parameters.getId());
 		
 		if(notification != null) {
 			manager.removeNotification(notification);
@@ -190,25 +182,23 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		NotificationHandler handler = new DesktopNotificationHandler();
 		
 		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters();
+			NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum");
 			
-			parameters.id = i;
-			parameters.title = "Notification " + i;
-			parameters.text = "Lorem ipsum";
+			parameters.setId(i);
 			
 			handler.showNotification(parameters);
 		}
 		
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
 		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters();
+			NotificationParameters parameters = new NotificationParameters("", "");
 			
-			parameters.id = i;
+			parameters.setId(i);
 			
 			handler.hideNotification(parameters);
 		}

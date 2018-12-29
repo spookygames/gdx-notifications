@@ -1,3 +1,7 @@
+plugins {
+    id 'net.ltgt.apt' version '0.10'
+}
+
 apply plugin: 'java'
 
 sourceCompatibility = 1.6
@@ -7,6 +11,8 @@ targetCompatibility = 1.6
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compileOnly "org.projectlombok:lombok:1.18.4"
+    apt 'org.projectlombok:lombok:1.18.4'
 }
 
 apply plugin: 'maven-publish'
