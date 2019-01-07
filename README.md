@@ -1,4 +1,5 @@
 # gdx-notifications
+[ ![Download](https://api.bintray.com/packages/spookygames/oss/gdx-notifications/images/download.svg) ](https://bintray.com/spookygames/oss/gdx-notifications/_latestVersion)
 
 Cross-platform notifications for libgdx.
 
