@@ -23,23 +23,39 @@
  */
 package net.spookygames.gdx.notifications;
 
-public interface NotificationHandler {
 
-    /**
-     * Trigger a new notification with given parameters.
-     *
-     * @param parameters
-     *            Mandatory notification parameters, cannot be null
-     */
-    void showNotification(NotificationParameters parameters);
+import com.badlogic.gdx.backends.gwt.GwtApplication;
+import com.badlogic.gdx.utils.Array;
+import com.google.gwt.user.client.ui.NotificationMole;
 
-    /**
-     * Hide notification with given parameters. Will most probably use the id
-     * property to properly identify the notification searched for but as most
-     * things there are platform-dependent nothing is guaranteed for sure.
-     *
-     * @param parameters
-     *            Mandatory notification parameters, cannot be null
-     */
-    void hideNotification(NotificationParameters parameters);
+public class HtmlNotificationHandler implements NotificationHandler {
+
+    private final GwtApplication application;
+
+    private Array<NotificationMole> notificationMoles = new Array<NotificationMole>();
+
+    public HtmlNotificationHandler(GwtApplication application) {
+        this.application = application;
+    }
+
+    @Override
+    public void showNotification(NotificationParameters parameters) {
+        NotificationMole nm = new NotificationMole();
+        application.getRootPanel().add(nm);
+        nm.setTitle(parameters.getTitle());
+        nm.setMessage(parameters.getText());
+        nm.getElement().setId(String.valueOf(parameters.getId()));
+        nm.show();
+        notificationMoles.add(nm);
+    }
+
+    @Override
+    public void hideNotification(NotificationParameters parameters) {
+        for (NotificationMole mole : notificationMoles) {
+            if (Integer.valueOf(mole.getElement().getId()) == parameters.getId()) {
+                mole.hide();
+                break;
+            }
+        }
+    }
 }

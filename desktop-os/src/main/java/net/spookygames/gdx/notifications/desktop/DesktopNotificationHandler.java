@@ -23,65 +23,58 @@
  */
 package net.spookygames.gdx.notifications.desktop;
 
-import lombok.NonNull;
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
 import notify.MessageType;
 import notify.Notify;
 
 public class DesktopNotificationHandler implements NotificationHandler {
-	
-	private final Notify notifier = Notify.getInstance();
-	
-	public DesktopNotificationHandler() {
-		super();
-	}
 
-	@Override
-	public void showNotification(@NonNull NotificationParameters parameters) {
-		notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
-	}
+    private final Notify notifier = Notify.getInstance();
 
-	@Override
-	public void hideNotification(NotificationParameters parameters) {
-		// Not supported
-	}
-	
-	public static void main(String[] args) {
-		MessageType[] types = MessageType.values();
-		NotificationHandler handler = new DesktopNotificationHandler();
-		
-		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum");
-			
-			parameters.setId(i);
-			parameters.setPayload(types[i % types.length]);
-			
-			handler.showNotification(parameters);
-		}
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters("", "");
-			
-			parameters.setId(i);
-			
-			handler.hideNotification(parameters);
-		}
-		
-	}
-	
-	protected MessageType defineMessageType(@NonNull NotificationParameters parameters) {
-		Object payload = parameters.getPayload();
-		if(payload instanceof MessageType)
-			return (MessageType) payload;
-		
-		return MessageType.NONE;
-	}
-	
+    public DesktopNotificationHandler() {
+        super();
+    }
+
+    public static void main(String[] args) {
+        MessageType[] types = MessageType.values();
+        NotificationHandler handler = new DesktopNotificationHandler();
+
+        for (int i = 0; i < 10; i++) {
+            NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum", i);
+            parameters.setPayload(types[i % types.length]);
+            handler.showNotification(parameters);
+        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < 10; i++) {
+            NotificationParameters parameters = new NotificationParameters("", "", i);
+            handler.hideNotification(parameters);
+        }
+
+    }
+
+    @Override
+    public void showNotification(NotificationParameters parameters) {
+        notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
+    }
+
+    @Override
+    public void hideNotification(NotificationParameters parameters) {
+        // Not supported
+    }
+
+    protected MessageType defineMessageType(NotificationParameters parameters) {
+        Object payload = parameters.getPayload();
+        if (payload instanceof MessageType)
+            return (MessageType) payload;
+
+        return MessageType.NONE;
+    }
+
 }

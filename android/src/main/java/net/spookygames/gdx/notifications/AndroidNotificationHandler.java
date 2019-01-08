@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package net.spookygames.gdx.notifications.android;
+package net.spookygames.gdx.notifications;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -29,41 +29,38 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import lombok.NonNull;
-import net.spookygames.gdx.notifications.NotificationHandler;
-import net.spookygames.gdx.notifications.NotificationParameters;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AndroidNotificationHandler implements NotificationHandler {
 
-	private final Context context;
-	private final NotificationManager manager;
+    private final Context context;
+    private final NotificationManager manager;
 
-	public AndroidNotificationHandler(Context context) {
-		this.context = context;
-		this.manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-	}
+    public AndroidNotificationHandler(Context context) {
+        this.context = context;
+        this.manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
 
-	@Override
-	public void showNotification(@NonNull NotificationParameters parameters) {
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"19161107");
+    @Override
+    public void showNotification(NotificationParameters parameters) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "19161107");
 
-		decorate(builder, parameters);
+        decorate(builder, parameters);
 
-		manager.notify(parameters.getId(), builder.build());
-	}
+        manager.notify(parameters.getId(), builder.build());
+    }
 
-	@Override
-	public void hideNotification(NotificationParameters parameters) {
-		manager.cancel(parameters.getId());
-	}
+    @Override
+    public void hideNotification(NotificationParameters parameters) {
+        manager.cancel(parameters.getId());
+    }
 
-	protected void decorate(NotificationCompat.Builder builder, @NonNull NotificationParameters parameters) {
-		builder
-			.setDefaults(Notification.DEFAULT_ALL)
-			.setContentTitle(parameters.getTitle())
-			.setContentText(parameters.getText())
-			.setSmallIcon(android.R.drawable.ic_dialog_info); // Should have been local ic_launcher, really, so please FIXME gradle build
-	}
+    protected void decorate(NotificationCompat.Builder builder, NotificationParameters parameters) {
+        builder
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setContentTitle(parameters.getTitle())
+                .setContentText(parameters.getText())
+                .setSmallIcon(android.R.drawable.ic_dialog_info); // Should have been local ic_launcher, really, so please FIXME gradle build
+    }
 
 }

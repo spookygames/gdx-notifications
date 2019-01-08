@@ -24,7 +24,12 @@ android {
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs 'src/main/java', 'gen'
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -36,8 +41,6 @@ project.archivesBaseName = "$libName-${project.name}"
 dependencies {
     implementation project(':core')
     implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-    compileOnly "org.projectlombok:lombok:1.18.4"
-    annotationProcessor 'org.projectlombok:lombok:1.18.4'
     implementation "com.android.support:support-compat:28.0.0"
 }
 
@@ -78,17 +81,6 @@ artifacts {
 }
 
 eclipse {
-    sourceSets {
-        main {
-            java.srcDirs 'src/main/java', 'gen'
-        }
-    }
-
-    jdt {
-        sourceCompatibility = 1.6
-        targetCompatibility = 1.6
-    }
-
     classpath {
         plusConfigurations += [project.configurations.compile]
         containers 'org.eclipse.andmore.ANDROID_FRAMEWORK', 'org.eclipse.andmore.LIBRARIES'
@@ -117,8 +109,7 @@ task createPom {
                 packaging 'aar'
                 artifactId project.archivesBaseName
             }
-        }
-        .writeTo("$buildDir/poms/pom-default.xml")
+        }.writeTo("$buildDir/poms/pom-default.xml")
     }
 }
 build.dependsOn createPom
