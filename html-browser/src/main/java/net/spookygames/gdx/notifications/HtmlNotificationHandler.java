@@ -73,9 +73,8 @@ public class HtmlNotificationHandler implements NotificationHandler {
 
     /**
      * Sets the icon for all notifications
-     * filetype internal: icon from assets
-     * filetype external/absolute:
      * @param icon path to the icon
+     * @param type internal: icon from assets, external/absolute: icon from external domain yourdomain.com/picture.png
      */
     public void setIcon(String icon, Files.FileType type) {
         switch (type) {
