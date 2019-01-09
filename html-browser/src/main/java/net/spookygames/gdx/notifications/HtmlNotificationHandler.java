@@ -104,7 +104,7 @@ public class HtmlNotificationHandler implements NotificationHandler {
         return $wnd.Notification.permission === "granted";
     }-*/;
 
-    native public void requestPermission(NotificationPermissionResult result) /*-{
+    private native void requestPermission(NotificationPermissionResult result) /*-{
         $wnd.Notification.requestPermission(function (permissionStatus) {
             if (permissionStatus === 'granted') {
                 result.@net.spookygames.gdx.notifications.HtmlNotificationHandler.NotificationPermissionResult::granted()();
