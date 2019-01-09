@@ -15,7 +15,7 @@ apply plugin: 'maven-publish'
 
 archivesBaseName = "$libName-${project.name}"
 
-javadoc.failOnError = false
+javadoc.options.addStringOption("sourcepath", "")
 
 // Javadoc
 task javadocJar(type: Jar, dependsOn: javadoc) {
