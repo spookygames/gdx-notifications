@@ -99,4 +99,4 @@ handler.hideNotification(parameters);
 - [x] Desktop (swing via JCommunique, native via java-to-OS-notify)
 - [x] Android
 - [ ] iOS
-- [ ] HTML
+- [x] HTML

@@ -54,6 +54,7 @@ public class HtmlNotificationHandler implements NotificationHandler {
         for (NotificationMole mole : notificationMoles) {
             if (Integer.valueOf(mole.getElement().getId()) == parameters.getId()) {
                 mole.hide();
+                this.notificationMoles.removeValue(mole, true);
                 break;
             }
         }

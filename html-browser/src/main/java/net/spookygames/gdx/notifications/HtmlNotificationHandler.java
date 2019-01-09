@@ -23,24 +23,38 @@
  */
 package net.spookygames.gdx.notifications;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.utils.Array;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class HtmlNotificationHandler implements NotificationHandler {
 
     private boolean supported;
+    private boolean hasPermission = false;
+    private boolean permissionRequested = false;
 
     private Array<NotificationJS> notifications = new Array<NotificationJS>();
 
+    private String icon;
+
     public HtmlNotificationHandler() {
         this.supported = isSupported();
+        if (this.supported) {
+            this.hasPermission = hasPermission();
+        }
     }
 
     @Override
     public void showNotification(NotificationParameters parameters) {
         if (this.supported) {
-            this.notifications.add(showNotificationJSNI(parameters));
+            if (this.hasPermission) {
+                this.notifications.add(showNotificationJSNI(parameters, this.icon));
+            } else {
+                if (!this.permissionRequested) {
+                    this.permissionRequested = true;
+                    this.requestPermission(new NotificationPermissionResult(parameters));
+                }
+            }
         }
     }
 
@@ -50,21 +64,57 @@ public class HtmlNotificationHandler implements NotificationHandler {
             for (NotificationJS notification : this.notifications) {
                 if (Integer.valueOf(notification.getTag()) == parameters.getId()) {
                     notification.close();
+                    this.notifications.removeValue(notification, true);
                     break;
                 }
             }
         }
     }
 
-    private native NotificationJS showNotificationJSNI(NotificationParameters parameters)/*-{
-        return new Notification(parameters.@net.spookygames.gdx.notifications.NotificationParameters::getTitle()(), {
+    /**
+     * Sets the icon for all notifications
+     * filetype internal: icon from assets
+     * filetype external/absolute:
+     * @param icon path to the icon
+     */
+    public void setIcon(String icon, Files.FileType type) {
+        switch (type) {
+            case Internal:
+                this.icon = "assets/" + icon;
+                break;
+            case External:
+            case Absolute:
+                this.icon = icon;
+                break;
+        }
+    }
+
+    private native NotificationJS showNotificationJSNI(NotificationParameters parameters, String icon) /*-{
+        return new $wnd.Notification(parameters.@net.spookygames.gdx.notifications.NotificationParameters::getTitle()(), {
             tag: parameters.@net.spookygames.gdx.notifications.NotificationParameters::getId()(),
-            body: parameters.@net.spookygames.gdx.notifications.NotificationParameters::getText()()
+            body: parameters.@net.spookygames.gdx.notifications.NotificationParameters::getText()(),
+            icon: icon
         });
     }-*/;
 
     private native boolean isSupported() /*-{
         return "Notification" in $wnd;
+    }-*/;
+
+    private native boolean hasPermission() /*-{
+        return $wnd.Notification.permission === "granted";
+    }-*/;
+
+    native public void requestPermission(NotificationPermissionResult result) /*-{
+        $wnd.Notification.requestPermission(function (permissionStatus) {
+            if (permissionStatus === 'granted') {
+                result.@net.spookygames.gdx.notifications.HtmlNotificationHandler.NotificationPermissionResult::granted()();
+            } else if (permissionStatus === 'denied') {
+                result.@net.spookygames.gdx.notifications.HtmlNotificationHandler.NotificationPermissionResult::denied()();
+            } else if (permissionStatus === 'default') {
+                result.@net.spookygames.gdx.notifications.HtmlNotificationHandler.NotificationPermissionResult::unknown()();
+            }
+        });
     }-*/;
 
     private static class NotificationJS extends JavaScriptObject {
@@ -78,5 +128,28 @@ public class HtmlNotificationHandler implements NotificationHandler {
         native final void close() /*-{
             this.close();
         }-*/;
+    }
+
+    private class NotificationPermissionResult {
+
+        NotificationParameters parameters;
+
+        NotificationPermissionResult(NotificationParameters parameters) {
+            this.parameters = parameters;
+        }
+
+        public void granted() {
+            hasPermission = true;
+            showNotification(this.parameters);
+        }
+
+        public void denied() {
+            hasPermission = false;
+        }
+
+        public void unknown() {
+            permissionRequested = false;
+            showNotification(this.parameters);
+        }
     }
 }

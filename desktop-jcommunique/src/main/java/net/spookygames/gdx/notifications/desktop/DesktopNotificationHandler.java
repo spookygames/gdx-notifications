@@ -67,7 +67,6 @@ public class DesktopNotificationHandler implements NotificationHandler {
     }
 
     public static void main(String[] args) {
-
         // TODO
         //https://github.com/spfrommer/JCommunique/wiki
 //
@@ -96,24 +95,6 @@ public class DesktopNotificationHandler implements NotificationHandler {
 //    SequenceManager - this queues up a number of Notifications which it will show one after another
 //
         // TODO
-
-
-        NotificationHandler handler = new DesktopNotificationHandler();
-
-        for (int i = 0; i < 10; i++) {
-            handler.showNotification(new NotificationParameters("Notification " + i, "Lorem ipsum", i));
-        }
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        for (int i = 0; i < 10; i++) {
-            handler.hideNotification(new NotificationParameters("", "", i));
-        }
-
     }
 
     @Override
@@ -152,8 +133,7 @@ public class DesktopNotificationHandler implements NotificationHandler {
 
         notifications.put(parameters.getId(), notification);
 
-        // The notification will disappear after 2 seconds, or after you click it
-        manager.addNotification(notification, Time.seconds(10));
+        manager.addNotification(notification, Time.infinite());
     }
 
     @Override

@@ -26,10 +26,9 @@ package net.spookygames.gdx.notifications;
 public class NotificationParameters {
 
     /**
-     * Notification id, utility may depend on context. Defaults to 19161107
-     * which doesn't mean a thing.
+     * Notification id, utility may depend on context. Must be different for each notification
      */
-    private int id = 19161107;
+    private int id;
 
     /**
      * Notification title, most probably important.
