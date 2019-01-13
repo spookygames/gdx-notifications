@@ -44,6 +44,10 @@ public class NotificationParameters {
      */
     private Object payload;
 
+    protected NotificationParameters() {
+
+    }
+
     public NotificationParameters(String title, String text, int id) {
         this.title = title;
         this.text = text;

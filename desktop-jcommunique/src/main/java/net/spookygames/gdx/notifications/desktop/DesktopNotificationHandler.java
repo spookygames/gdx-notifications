@@ -45,30 +45,30 @@ import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
 
 public class DesktopNotificationHandler implements NotificationHandler {
 
-    private final IntMap<Notification> notifications = new IntMap<>();
+	private final IntMap<Notification> notifications = new IntMap<>();
 
-    private final NotificationManager manager;
+	private final NotificationManager manager;
 
-    private final WindowTheme windowTheme;
-    private final TextTheme textTheme;
+	private final WindowTheme windowTheme;
+	private final TextTheme textTheme;
 
-    private final boolean translucencySupported;
+	private final boolean translucencySupported;
 
-    public DesktopNotificationHandler() {
-        super();
-        this.windowTheme = buildWindowTheme();
-        this.textTheme = buildTextTheme();
-        this.manager = buildManager();
+	public DesktopNotificationHandler() {
+		super();
+		this.windowTheme = buildWindowTheme();
+		this.textTheme = buildTextTheme();
+		this.manager = buildManager();
 
-        // Determine if the GraphicsDevice supports translucency.
-        translucencySupported = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isWindowTranslucencySupported(TRANSLUCENT);
-        if (!translucencySupported)
-            windowTheme.opacity = 1.0d;
-    }
+		// Determine if the GraphicsDevice supports translucency.
+		translucencySupported = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isWindowTranslucencySupported(TRANSLUCENT);
+		if (!translucencySupported)
+			windowTheme.opacity = 1.0d;
+	}
 
-    public static void main(String[] args) {
-        // TODO
-        //https://github.com/spfrommer/JCommunique/wiki
+	public static void main(String[] args) {
+		// TODO
+		//https://github.com/spfrommer/JCommunique/wiki
 //
 //		JCommunique also offers the following:
 //
@@ -94,82 +94,82 @@ public class DesktopNotificationHandler implements NotificationHandler {
 //    SlideManager - slides Notifications to their standard locations from the side of the screen
 //    SequenceManager - this queues up a number of Notifications which it will show one after another
 //
-        // TODO
-    }
+		// TODO
+	}
 
-    @Override
-    public void showNotification(NotificationParameters parameters) {
-        // Creates a text notification
-        TextNotification notification = new TextNotification() {
-            @Override
-            public void setOpacity(double opacity) {
-                if (translucencySupported)
-                    super.setOpacity(opacity);
-            }
-        };
+	@Override
+	public void showNotification(NotificationParameters parameters) {
+		// Creates a text notification
+		TextNotification notification = new TextNotification() {
+			@Override
+			public void setOpacity(double opacity) {
+				if (translucencySupported)
+					super.setOpacity(opacity);
+			}
+		};
 
-        notification.setWindowTheme(windowTheme);
-        notification.setTextTheme(textTheme);
-        notification.setTitle(parameters.getTitle());
-        notification.setSubtitle(parameters.getText());
+		notification.setWindowTheme(windowTheme);
+		notification.setTextTheme(textTheme);
+		notification.setTitle(parameters.getTitle());
+		notification.setSubtitle(parameters.getText());
 
-        notification.setCloseOnClick(true);
-        notification.addNotificationListener(new NotificationListener() {
-            @Override
-            public void actionCompleted(Notification notification, String action) {
-                if (WindowNotification.HIDDEN/*CLICKED*/.equals(action)) {
-                    // Remove from index
-                    Iterator<Entry<Notification>> it = notifications.entries();
-                    while (it.hasNext()) {
-                        Entry<Notification> entry = it.next();
-                        if (entry.value == notification) {
-                            it.remove();
-                            break;
-                        }
-                    }
-                }
-            }
-        });
+		notification.setCloseOnClick(true);
+		notification.addNotificationListener(new NotificationListener() {
+			@Override
+			public void actionCompleted(Notification notification, String action) {
+				if (WindowNotification.HIDDEN/*CLICKED*/.equals(action)) {
+					// Remove from index
+					Iterator<Entry<Notification>> it = notifications.entries();
+					while (it.hasNext()) {
+						Entry<Notification> entry = it.next();
+						if (entry.value == notification) {
+							it.remove();
+							break;
+						}
+					}
+				}
+			}
+		});
 
-        notifications.put(parameters.getId(), notification);
+		notifications.put(parameters.getId(), notification);
 
-        manager.addNotification(notification, Time.infinite());
-    }
+		manager.addNotification(notification, Time.infinite());
+	}
 
-    @Override
-    public void hideNotification(NotificationParameters parameters) {
-        Notification notification = notifications.get(parameters.getId());
+	@Override
+	public void hideNotification(NotificationParameters parameters) {
+		Notification notification = notifications.get(parameters.getId());
 
-        if (notification != null) {
-            manager.removeNotification(notification);
-        }
-    }
+		if (notification != null) {
+			manager.removeNotification(notification);
+		}
+	}
 
-    protected WindowTheme buildWindowTheme() {
-        WindowTheme window = new WindowTheme();
-        window.background = new Color(255, 255, 255);
-        window.foreground = new Color(160, 205, 250);
-        window.opacity = 0.8d;
-        window.width = 300;
-        window.height = 100;
+	protected WindowTheme buildWindowTheme() {
+		WindowTheme window = new WindowTheme();
+		window.background = new Color(255, 255, 255);
+		window.foreground = new Color(160, 205, 250);
+		window.opacity = 0.8d;
+		window.width = 300;
+		window.height = 100;
 
-        return window;
-    }
+		return window;
+	}
 
-    protected TextTheme buildTextTheme() {
+	protected TextTheme buildTextTheme() {
 
-        TextTheme text = new TextTheme();
-        text.title = new Font("Arial", Font.BOLD, 22);
-        text.subtitle = new Font("Arial", Font.PLAIN, 16);
-        text.titleColor = new Color(10, 10, 10);
-        text.subtitleColor = new Color(10, 10, 10);
+		TextTheme text = new TextTheme();
+		text.title = new Font("Arial", Font.BOLD, 22);
+		text.subtitle = new Font("Arial", Font.PLAIN, 16);
+		text.titleColor = new Color(10, 10, 10);
+		text.subtitleColor = new Color(10, 10, 10);
 
-        return text;
-    }
+		return text;
+	}
 
-    protected NotificationManager buildManager() {
-        QueueManager manager = new QueueManager(Location.NORTHEAST);
+	protected NotificationManager buildManager() {
+		QueueManager manager = new QueueManager(Location.NORTHEAST);
 //		manager.setFadeEnabled(true);	// this is a feature under testing - it doesn't look good across all platforms
-        return manager;
-    }
+		return manager;
+	}
 }

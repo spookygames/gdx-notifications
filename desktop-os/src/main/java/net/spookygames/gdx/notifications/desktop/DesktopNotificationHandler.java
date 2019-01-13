@@ -30,51 +30,51 @@ import notify.Notify;
 
 public class DesktopNotificationHandler implements NotificationHandler {
 
-    private final Notify notifier = Notify.getInstance();
+	private final Notify notifier = Notify.getInstance();
 
-    public DesktopNotificationHandler() {
-        super();
-    }
+	public DesktopNotificationHandler() {
+		super();
+	}
 
-    public static void main(String[] args) {
-        MessageType[] types = MessageType.values();
-        NotificationHandler handler = new DesktopNotificationHandler();
+	public static void main(String[] args) {
+		MessageType[] types = MessageType.values();
+		NotificationHandler handler = new DesktopNotificationHandler();
 
-        for (int i = 0; i < 10; i++) {
-            NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum", i);
-            parameters.setPayload(types[i % types.length]);
-            handler.showNotification(parameters);
-        }
+		for (int i = 0; i < 10; i++) {
+			NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum", i);
+			parameters.setPayload(types[i % types.length]);
+			handler.showNotification(parameters);
+		}
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
-        for (int i = 0; i < 10; i++) {
-            NotificationParameters parameters = new NotificationParameters("", "", i);
-            handler.hideNotification(parameters);
-        }
+		for (int i = 0; i < 10; i++) {
+			NotificationParameters parameters = new NotificationParameters("", "", i);
+			handler.hideNotification(parameters);
+		}
 
-    }
+	}
 
-    @Override
-    public void showNotification(NotificationParameters parameters) {
-        notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
-    }
+	@Override
+	public void showNotification(NotificationParameters parameters) {
+		notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
+	}
 
-    @Override
-    public void hideNotification(NotificationParameters parameters) {
-        // Not supported
-    }
+	@Override
+	public void hideNotification(NotificationParameters parameters) {
+		// Not supported
+	}
 
-    protected MessageType defineMessageType(NotificationParameters parameters) {
-        Object payload = parameters.getPayload();
-        if (payload instanceof MessageType)
-            return (MessageType) payload;
+	protected MessageType defineMessageType(NotificationParameters parameters) {
+		Object payload = parameters.getPayload();
+		if (payload instanceof MessageType)
+			return (MessageType) payload;
 
-        return MessageType.NONE;
-    }
+		return MessageType.NONE;
+	}
 
 }

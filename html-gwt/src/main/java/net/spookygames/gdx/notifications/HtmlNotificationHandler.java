@@ -30,33 +30,33 @@ import com.google.gwt.user.client.ui.NotificationMole;
 
 public class HtmlNotificationHandler implements NotificationHandler {
 
-    private final GwtApplication application;
+	private final GwtApplication application;
 
-    private Array<NotificationMole> notificationMoles = new Array<NotificationMole>();
+	private Array<NotificationMole> notificationMoles = new Array<NotificationMole>();
 
-    public HtmlNotificationHandler(GwtApplication application) {
-        this.application = application;
-    }
+	public HtmlNotificationHandler(GwtApplication application) {
+		this.application = application;
+	}
 
-    @Override
-    public void showNotification(NotificationParameters parameters) {
-        NotificationMole nm = new NotificationMole();
-        application.getRootPanel().add(nm);
-        nm.setTitle(parameters.getTitle());
-        nm.setMessage(parameters.getText());
-        nm.getElement().setId(String.valueOf(parameters.getId()));
-        nm.show();
-        notificationMoles.add(nm);
-    }
+	@Override
+	public void showNotification(NotificationParameters parameters) {
+		NotificationMole nm = new NotificationMole();
+		application.getRootPanel().add(nm);
+		nm.setTitle(parameters.getTitle());
+		nm.setMessage(parameters.getText());
+		nm.getElement().setId(String.valueOf(parameters.getId()));
+		nm.show();
+		notificationMoles.add(nm);
+	}
 
-    @Override
-    public void hideNotification(NotificationParameters parameters) {
-        for (NotificationMole mole : notificationMoles) {
-            if (Integer.valueOf(mole.getElement().getId()) == parameters.getId()) {
-                mole.hide();
-                this.notificationMoles.removeValue(mole, true);
-                break;
-            }
-        }
-    }
+	@Override
+	public void hideNotification(NotificationParameters parameters) {
+		for (NotificationMole mole : notificationMoles) {
+			if (Integer.valueOf(mole.getElement().getId()) == parameters.getId()) {
+				mole.hide();
+				this.notificationMoles.removeValue(mole, true);
+				break;
+			}
+		}
+	}
 }
