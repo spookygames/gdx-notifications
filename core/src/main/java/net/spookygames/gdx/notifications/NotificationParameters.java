@@ -25,64 +25,64 @@ package net.spookygames.gdx.notifications;
 
 public class NotificationParameters {
 
-    /**
-     * Notification id, utility may depend on context. Must be different for each notification
-     */
-    private int id;
+	/**
+	 * Notification id, utility may depend on context. Must be different for each notification
+	 */
+	private int id;
 
-    /**
-     * Notification title, most probably important.
-     */
-    private String title;
-    /**
-     * Notification content, probably important.
-     */
-    private String text;
-    /**
-     * Arbitrary payload to append to a notification. Absolutely
-     * context-dependent.
-     */
-    private Object payload;
+	/**
+	 * Notification title, most probably important.
+	 */
+	private String title;
+	/**
+	 * Notification content, probably important.
+	 */
+	private String text;
+	/**
+	 * Arbitrary payload to append to a notification. Absolutely
+	 * context-dependent.
+	 */
+	private Object payload;
 
-    protected NotificationParameters() {
+	protected NotificationParameters() {
 
-    }
+	}
 
-    public NotificationParameters(String title, String text, int id) {
-        this.title = title;
-        this.text = text;
-        this.id = id;
-    }
+	public NotificationParameters(String title, String text, int id) {
+		this.title = title;
+		this.text = text;
+		this.id = id;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public Object getPayload() {
-        return payload;
-    }
+	public Object getPayload() {
+		return payload;
+	}
 
-    public void setPayload(Object payload) {
-        this.payload = payload;
-    }
+	public void setPayload(Object payload) {
+		this.payload = payload;
+	}
 }
