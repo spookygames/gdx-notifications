@@ -27,57 +27,73 @@ import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.Notification.Builder;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
-//import net.spookygames.gdx.notifications.android.R;
-import android.R;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AndroidNotificationHandler implements NotificationHandler {
 
+	private final String CHANNEL_ID = "19161107";
+
 	private final Context context;
 	private final NotificationManager manager;
+
+	private int icon;
 
 	public AndroidNotificationHandler(Context context) {
 		this.context = context;
 		this.manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		if (this.manager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Default", NotificationManager.IMPORTANCE_DEFAULT);
+			channel.setDescription("Default channel");
+			this.manager.createNotificationChannel(channel);
+		}
+
+		this.icon = context.getApplicationInfo().icon;
 	}
 
 	@Override
 	public void showNotification(NotificationParameters parameters) {
+
 		checkNotNull(parameters, "parameters");
 
-		Builder builder = new Builder(context);
-		
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+
 		decorate(builder, parameters);
-		
-		@SuppressWarnings("deprecation")
-		Notification notification = builder.getNotification();	// build() is only available starting from Jelly Bean
 
-		int notificationId = parameters.id;
-
-		manager.notify(notificationId, notification);
+		manager.notify(parameters.getId(), builder.build());
 	}
 
 	@Override
 	public void hideNotification(NotificationParameters parameters) {
-		manager.cancel(parameters.id);
+		manager.cancel(parameters.getId());
 	}
 
-	protected void decorate(Builder builder, NotificationParameters parameters) {
-		checkNotNull(parameters.title, "parameters.title");
-		checkNotNull(parameters.text, "parameters.text");
+	/**
+	 * Sets the small icon for all notifications
+	 * See <a href="https://developer.android.com/guide/practices/ui_guidelines/icon_design_status_bar">here</a> for guidelines
+	 * @param icon A resource ID in the application's package of the drawable to use.
+	 */
+	public void setIcon(int icon) {
+		this.icon = icon;
+	}
+
+	protected void decorate(NotificationCompat.Builder builder, NotificationParameters parameters) {
+
+		checkNotNull(parameters.getTitle(), "parameters.title");
+		checkNotNull(parameters.getText(), "parameters.text");
 		
 		builder
 			.setDefaults(Notification.DEFAULT_ALL)
-			.setContentTitle(parameters.title)
-			.setContentText(parameters.text)
-			.setSmallIcon(R.drawable.ic_dialog_info) // Should have been local ic_launcher, really, so please FIXME gradle build
-				;
+			.setContentTitle(parameters.getTitle())
+			.setContentText(parameters.getText())
+			.setSmallIcon(this.icon);
 	}
 
 }

@@ -31,9 +31,9 @@ import notify.MessageType;
 import notify.Notify;
 
 public class DesktopNotificationHandler implements NotificationHandler {
-	
+
 	private final Notify notifier = Notify.getInstance();
-	
+
 	public DesktopNotificationHandler() {
 		super();
 	}
@@ -42,54 +42,47 @@ public class DesktopNotificationHandler implements NotificationHandler {
 	public void showNotification(NotificationParameters parameters) {
 
 		checkNotNull(parameters, "parameters");
-		checkNotNull(parameters.title, "parameters.title");
-		checkNotNull(parameters.text, "parameters.text");
+		checkNotNull(parameters.getTitle(), "parameters.title");
+		checkNotNull(parameters.getText(), "parameters.text");
 		
-		notifier.notify(defineMessageType(parameters), parameters.title, parameters.text);
+		notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
 	}
 
 	@Override
 	public void hideNotification(NotificationParameters parameters) {
 		// Not supported
 	}
-	
+
+	protected MessageType defineMessageType(NotificationParameters parameters) {
+		Object payload = parameters.getPayload();
+		if(payload instanceof MessageType)
+			return (MessageType) payload;
+
+		return MessageType.NONE;
+	}
+
 	public static void main(String[] args) {
 		MessageType[] types = MessageType.values();
 		NotificationHandler handler = new DesktopNotificationHandler();
-		
-		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters();
-			
-			parameters.id = i;
-			parameters.title = "Notification " + i;
-			parameters.text = "Lorem ipsum";
-			parameters.payload = types[i % types.length];
-			
+
+		for (int i = 0; i < 10; i++) {
+			NotificationParameters parameters = new NotificationParameters(i, "Notification " + i, "Lorem ipsum");
+			parameters.setPayload(types[i % types.length]);
 			handler.showNotification(parameters);
 		}
-		
+
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		for(int i = 0 ; i < 10 ; i++) {
+
+		for (int i = 0; i < 10; i++) {
 			NotificationParameters parameters = new NotificationParameters();
-			
-			parameters.id = i;
-			
 			handler.hideNotification(parameters);
+
+			parameters.setId(i);
 		}
-		
 	}
-	
-	protected MessageType defineMessageType(NotificationParameters parameters) {
-		Object payload = parameters.payload;
-		if(payload != null && payload instanceof MessageType)
-			return (MessageType) payload;
-		
-		return MessageType.NONE;
-	}
-	
+
 }

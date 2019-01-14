@@ -23,13 +23,7 @@
  */
 package net.spookygames.gdx.notifications.desktop;
 
-import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
 import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.util.Iterator;
 
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntMap.Entry;
@@ -43,64 +37,68 @@ import com.notification.types.WindowNotification;
 import com.theme.TextTheme;
 import com.theme.WindowTheme;
 import com.utils.Time;
-
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
 
+import java.awt.*;
+import java.util.Iterator;
+
+import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
+
 public class DesktopNotificationHandler implements NotificationHandler {
-	
+
 	private final IntMap<Notification> notifications = new IntMap<Notification>();
-	
+
 	private final NotificationManager manager;
 
 	private final WindowTheme windowTheme;
 	private final TextTheme textTheme;
-	
+
 	private final boolean translucencySupported;
-	
+
 	public DesktopNotificationHandler() {
 		super();
 		this.windowTheme = buildWindowTheme();
 		this.textTheme = buildTextTheme();
 		this.manager = buildManager();
 
-        // Determine if the GraphicsDevice supports translucency.
-        translucencySupported = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isWindowTranslucencySupported(TRANSLUCENT);
-        if(!translucencySupported)
-        	windowTheme.opacity = 1.0d;
+		// Determine if the GraphicsDevice supports translucency.
+		translucencySupported = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isWindowTranslucencySupported(TRANSLUCENT);
+		if (!translucencySupported)
+			windowTheme.opacity = 1.0d;
 	}
 
 	@Override
 	public void showNotification(NotificationParameters parameters) {
 
 		checkNotNull(parameters, "parameters");
-		checkNotNull(parameters.title, "parameters.title");
-		checkNotNull(parameters.text, "parameters.text");
+		checkNotNull(parameters.getTitle(), "parameters.title");
+		checkNotNull(parameters.getText(), "parameters.text");
 		
 		// Creates a text notification
 		TextNotification notification = new TextNotification() {
 			@Override
 			public void setOpacity(double opacity) {
-				if(translucencySupported)
+				if (translucencySupported)
 					super.setOpacity(opacity);
 			}
 		};
 
 		notification.setWindowTheme(windowTheme);
 		notification.setTextTheme(textTheme);
-		notification.setTitle(parameters.title);
-		notification.setSubtitle(parameters.text);
-		
+		notification.setTitle(parameters.getTitle());
+		notification.setSubtitle(parameters.getText());
+
 		notification.setCloseOnClick(true);
 		notification.addNotificationListener(new NotificationListener() {
 			@Override
 			public void actionCompleted(Notification notification, String action) {
-				if(WindowNotification.HIDDEN/*CLICKED*/.equals(action)) {
+				if (WindowNotification.HIDDEN/*CLICKED*/.equals(action)) {
 					// Remove from index
 					Iterator<Entry<Notification>> it = notifications.entries();
-					while(it.hasNext()) {
+					while (it.hasNext()) {
 						Entry<Notification> entry = it.next();
-						if(entry.value == notification) {
+						if (entry.value == notification) {
 							it.remove();
 							break;
 						}
@@ -108,11 +106,10 @@ public class DesktopNotificationHandler implements NotificationHandler {
 				}
 			}
 		});
-		
-		notifications.put(parameters.id, notification);
-		
-		// The notification will disappear after 2 seconds, or after you click it 
-		manager.addNotification(notification, Time.seconds(2));
+
+		notifications.put(parameters.getId(), notification);
+
+		manager.addNotification(notification, Time.infinite());
 	}
 
 	@Override
@@ -120,9 +117,9 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		
 		checkNotNull(parameters, "parameters");
 		
-		Notification notification = notifications.get(parameters.id);
-		
-		if(notification != null) {
+		Notification notification = notifications.get(parameters.getId());
+
+		if (notification != null) {
 			manager.removeNotification(notification);
 		}
 	}
@@ -134,7 +131,7 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		window.opacity = 0.8d;
 		window.width = 300;
 		window.height = 100;
-		
+
 		return window;
 	}
 
@@ -145,10 +142,10 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		text.subtitle = new Font("Arial", Font.PLAIN, 16);
 		text.titleColor = new Color(10, 10, 10);
 		text.subtitleColor = new Color(10, 10, 10);
-		
+
 		return text;
 	}
-	
+
 	protected NotificationManager buildManager() {
 		QueueManager manager = new QueueManager(Location.NORTHEAST);
 //		manager.setFadeEnabled(true);	// this is a feature under testing - it doesn't look good across all platforms
@@ -190,11 +187,7 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		NotificationHandler handler = new DesktopNotificationHandler();
 		
 		for(int i = 0 ; i < 10 ; i++) {
-			NotificationParameters parameters = new NotificationParameters();
-			
-			parameters.id = i;
-			parameters.title = "Notification " + i;
-			parameters.text = "Lorem ipsum";
+			NotificationParameters parameters = new NotificationParameters(i, "Notification " + i, "Lorem ipsum");
 			
 			handler.showNotification(parameters);
 		}
@@ -208,7 +201,7 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		for(int i = 0 ; i < 10 ; i++) {
 			NotificationParameters parameters = new NotificationParameters();
 			
-			parameters.id = i;
+			parameters.setId(i);
 			
 			handler.hideNotification(parameters);
 		}

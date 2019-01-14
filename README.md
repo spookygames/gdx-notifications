@@ -1,8 +1,11 @@
 # gdx-notifications
+[ ![Download](https://api.bintray.com/packages/spookygames/oss/gdx-notifications/images/download.svg) ](https://bintray.com/spookygames/oss/gdx-notifications/_latestVersion)
 
 Cross-platform notifications for libgdx.
 
 Desktop support thanks to [JCommunique](https://github.com/spfrommer/JCommunique) and [java-to-OS-notify](https://github.com/wokier/java-to-OS-notify).
+
+See [here](https://github.com/SimonIT/gdx-notifications-app) for an example implementation.
 
 ## Setup
 
@@ -24,9 +27,9 @@ Add the pretty **bold** parts into your _build.gradle_ file:
         dependencies {
             compile project(":core")
             ...
-            <b>compile "net.spookygames.gdx:gdx-notifications-desktop-jcommunique:0.0.1"</b> <i>for Swing notifications</i>
+            <b>compile "net.spookygames.gdx:gdx-notifications-desktop-jcommunique:0.0.2-SNAPSHOT"</b> <i>for Swing notifications</i>
             <i>OR</i>
-            <b>compile "net.spookygames.gdx:gdx-notifications-desktop-os:0.0.1"</b> <i>for native notifications</i>
+            <b>compile "net.spookygames.gdx:gdx-notifications-desktop-os:0.0.2-SNAPSHOT"</b> <i>for native notifications</i>
         }
     }
     
@@ -37,7 +40,25 @@ Add the pretty **bold** parts into your _build.gradle_ file:
         dependencies {
             compile project(":core")
             ...
-            <b>compile "net.spookygames.gdx:gdx-notifications-android:0.0.1"</b>
+            <b>compile "net.spookygames.gdx:gdx-notifications-android:0.0.2-SNAPSHOT"</b>
+        }
+    }
+    
+    project(":html") {
+            
+        ...
+        
+        dependencies {
+            compile project(":core")
+            ...
+            
+            <b>compile "net.spookygames.gdx:gdx-notifications-html-gwt:0.0.2-SNAPSHOT"</b>
+            <b>compile "net.spookygames.gdx:gdx-notifications:0.0.2-SNAPSHOT:sources"</b>
+            <b>compile "net.spookygames.gdx:gdx-notifications-html-gwt:0.0.2-SNAPSHOT:sources"</b> <i>for gwt notifications</i>
+            <i>OR</i>
+            <b>compile "net.spookygames.gdx:gdx-notifications-html-browser:0.0.2-SNAPSHOT"</b>
+            <b>compile "net.spookygames.gdx:gdx-notifications:0.0.2-SNAPSHOT:sources"</b>
+            <b>compile "net.spookygames.gdx:gdx-notifications-html-browser:0.0.2-SNAPSHOT:sources"</b> <i>for browser notifications</i>
         }
     }
     
@@ -47,10 +68,21 @@ Add the pretty **bold** parts into your _build.gradle_ file:
         
         dependencies {
             ...
-            <b>compile "net.spookygames.gdx:gdx-notifications:0.0.1"</b>
+            <b>compile "net.spookygames.gdx:gdx-notifications:0.0.2-SNAPSHOT"</b>
         }
     }
 </pre>
+
+
+Add 
+
+`<inherits name="net.spookygames.gdx.notifications.gdx_notifications_gwt"/>`
+
+after
+
+`<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt'/>`
+
+in your `GdxDefinition.gwt.xml`.
 
 ## Usage
 
@@ -60,7 +92,8 @@ We're talking platform-specific stuff here, so you'll need to initialize the mag
 
 Classes you'll have for this:
 * `DesktopNotificationHandler` (desktop, whether it's from JCommunique or java-to-OS-notify)
-* `AndroidNotificationHandler` (warning, notifications are not supported for android versions below 11)
+* `AndroidNotificationHandler` (warning, notifications are not supported for android versions below 14)
+* `HtmlNotificationHandler`
 
 And the base interface with two methods:
 * `NotificationHandler`
@@ -69,14 +102,7 @@ And the base interface with two methods:
 
 ```java
 NotificationHandler handler = <your_platform-specific_handler_here>;
-
-NotificationParameters parameters = new NotificationParameters();
-
-parameters.id = 12;
-parameters.title = "Notification for the people";
-parameters.text = "Lorem ipsum";
-
-handler.showNotification(parameters);
+handler.showNotification(new NotificationParameters("Notification for the people", "Lorem ipsum", 12));
 ```
 
 ### Remove notification
@@ -87,15 +113,12 @@ NotificationHandler handler = <your_platform-specific_handler_here>;
 // You could (should!) very well get the parameters object from above
 // But it will go nice too if you create a new object
 // Only the id matters actually
-NotificationParameters parameters = new NotificationParameters();
-parameters.id = 12;
-	
-handler.hideNotification(parameters);
+handler.hideNotification(new NotificationParameters("", "", 12));
 ```
 
 ## Platform support
 
-- [x] Desktop (swing via JCommunique, native via java-to-OS-notify)
+- [x] Desktop (swing via [JCommunique](https://github.com/spfrommer/JCommunique), native via [java-to-OS-notify](https://github.com/wokier/java-to-OS-notify))
 - [x] Android
 - [ ] iOS
-- [ ] HTML
+- [x] HTML (gwt via [NotificationMole](http://www.gwtproject.org/javadoc/latest/com/google/gwt/user/client/ui/NotificationMole.html), browser via [Notification Web-API](https://developer.mozilla.org/en-US/docs/Web/API/Notification))

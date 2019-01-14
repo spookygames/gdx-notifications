@@ -23,68 +23,40 @@
  */
 package net.spookygames.gdx.notifications;
 
-public class NotificationParameters {
 
-	/**
-	 * Notification id, utility may depend on context. Must be different for each notification.
-	 */
-	private int id;
+import com.badlogic.gdx.backends.gwt.GwtApplication;
+import com.badlogic.gdx.utils.Array;
+import com.google.gwt.user.client.ui.NotificationMole;
 
-	/**
-	 * Notification title, most probably important.
-	 */
-	private String title;
+public class HtmlNotificationHandler implements NotificationHandler {
 
-	/**
-	 * Notification content, probably important.
-	 */
-	private String text;
+	private final GwtApplication application;
 
-	/**
-	 * Arbitrary payload to append to a notification. Absolutely
-	 * context-dependent.
-	 */
-	private Object payload;
+	private Array<NotificationMole> notificationMoles = new Array<NotificationMole>();
 
-	public NotificationParameters() {
-
+	public HtmlNotificationHandler(GwtApplication application) {
+		this.application = application;
 	}
 
-	public NotificationParameters(int id, String title, String text) {
-		this.id = id;
-		this.title = title;
-		this.text = text;
+	@Override
+	public void showNotification(NotificationParameters parameters) {
+		NotificationMole nm = new NotificationMole();
+		application.getRootPanel().add(nm);
+		nm.setTitle(parameters.getTitle());
+		nm.setMessage(parameters.getText());
+		nm.getElement().setId(String.valueOf(parameters.getId()));
+		nm.show();
+		notificationMoles.add(nm);
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Object getPayload() {
-		return payload;
-	}
-
-	public void setPayload(Object payload) {
-		this.payload = payload;
+	@Override
+	public void hideNotification(NotificationParameters parameters) {
+		for (NotificationMole mole : notificationMoles) {
+			if (Integer.valueOf(mole.getElement().getId()) == parameters.getId()) {
+				mole.hide();
+				this.notificationMoles.removeValue(mole, true);
+				break;
+			}
+		}
 	}
 }

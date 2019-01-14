@@ -1,20 +1,21 @@
-
 buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.6'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
 allprojects {
-
     apply plugin: 'eclipse'
+    apply plugin: "idea"
 
     group = 'net.spookygames.gdx'
-    version = '0.0.1'
+    version = '0.0.2-SNAPSHOT'
 
     ext {
         gdxVersion = '1.5.5'
@@ -24,9 +25,14 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        google()
     }
 }
 
 subprojects {
-    eclipse.project.name = "$libName-$name"
+    eclipse {
+        project {
+            name = "$libName-$name"
+        }
+    }
 }
