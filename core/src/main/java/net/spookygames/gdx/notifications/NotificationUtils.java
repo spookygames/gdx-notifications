@@ -23,68 +23,24 @@
  */
 package net.spookygames.gdx.notifications;
 
-public class NotificationParameters {
+/**
+ * Some run-of-the-mill utility methods for {@link NotificationHandler} implementations.
+ * 
+ * @author thorthur
+ *
+ */
+public class NotificationUtils {
 
-	/**
-	 * Notification id, utility may depend on context. Must be different for each notification.
+	private NotificationUtils() {
+	}
+
+	/*
+	 * I may have preferred the use of an InvalidArgumentException, but let's
+	 * stick to standards here.
+	 * (http://stackoverflow.com/questions/3881/illegalargumentexception-or-nullpointerexception-for-a-null-parameter)
 	 */
-	private int id;
-
-	/**
-	 * Notification title, most probably important.
-	 */
-	private String title;
-
-	/**
-	 * Notification content, probably important.
-	 */
-	private String text;
-
-	/**
-	 * Arbitrary payload to append to a notification. Absolutely
-	 * context-dependent.
-	 */
-	private Object payload;
-
-	public NotificationParameters() {
-
-	}
-
-	public NotificationParameters(int id, String title, String text) {
-		this.id = id;
-		this.title = title;
-		this.text = text;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Object getPayload() {
-		return payload;
-	}
-
-	public void setPayload(Object payload) {
-		this.payload = payload;
+	public static void checkNotNull(Object argument, String argumentName) {
+		if (argument == null)
+			throw new NullPointerException("Given argument \"" + argumentName + "\" must not be null");
 	}
 }

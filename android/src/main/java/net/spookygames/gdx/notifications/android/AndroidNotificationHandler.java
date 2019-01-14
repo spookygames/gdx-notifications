@@ -23,6 +23,8 @@
  */
 package net.spookygames.gdx.notifications.android;
 
+import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
+
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -58,6 +60,9 @@ public class AndroidNotificationHandler implements NotificationHandler {
 
 	@Override
 	public void showNotification(NotificationParameters parameters) {
+
+		checkNotNull(parameters, "parameters");
+
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
 
 		decorate(builder, parameters);
@@ -80,11 +85,15 @@ public class AndroidNotificationHandler implements NotificationHandler {
 	}
 
 	protected void decorate(NotificationCompat.Builder builder, NotificationParameters parameters) {
+
+		checkNotNull(parameters.getTitle(), "parameters.title");
+		checkNotNull(parameters.getText(), "parameters.text");
+		
 		builder
-				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentTitle(parameters.getTitle())
-				.setContentText(parameters.getText())
-				.setSmallIcon(this.icon);
+			.setDefaults(Notification.DEFAULT_ALL)
+			.setContentTitle(parameters.getTitle())
+			.setContentText(parameters.getText())
+			.setSmallIcon(this.icon);
 	}
 
 }

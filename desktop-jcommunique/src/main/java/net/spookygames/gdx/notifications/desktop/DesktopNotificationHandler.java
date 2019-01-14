@@ -23,6 +23,8 @@
  */
 package net.spookygames.gdx.notifications.desktop;
 
+import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
+
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.IntMap.Entry;
 import com.notification.Notification;
@@ -45,7 +47,7 @@ import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
 
 public class DesktopNotificationHandler implements NotificationHandler {
 
-	private final IntMap<Notification> notifications = new IntMap<>();
+	private final IntMap<Notification> notifications = new IntMap<Notification>();
 
 	private final NotificationManager manager;
 
@@ -66,39 +68,13 @@ public class DesktopNotificationHandler implements NotificationHandler {
 			windowTheme.opacity = 1.0d;
 	}
 
-	public static void main(String[] args) {
-		// TODO
-		//https://github.com/spfrommer/JCommunique/wiki
-//
-//		JCommunique also offers the following:
-//
-//		    IconUtils for reading and scaling icons from files
-//
-//		    Easy automatic Notification adjustment based on platform
-//
-//
-//
-//
-//JCommunique offers several Notifications and NotificationManagers. If you're not sure what these are, take a look at the API Explanation section. Of course, you can always create your own Notifications and NotificationManagers.
-//Notifications
-//
-//    TextNotification - displays a title and a subtitle with themed Fonts
-//    IconNotification - same as TextNotification, but with an additional method for setting the ImageIcon
-//    AcceptNotification - allows for user feedback via accept and decline buttons
-//    ProgressNotification - shows a progress bar to the user
-//
-//NotificationManagers
-//
-//    SimpleManager - shows Notifications in one location with optional fading
-//    QueueManager - scrolls Notifications with optional fading
-//    SlideManager - slides Notifications to their standard locations from the side of the screen
-//    SequenceManager - this queues up a number of Notifications which it will show one after another
-//
-		// TODO
-	}
-
 	@Override
 	public void showNotification(NotificationParameters parameters) {
+
+		checkNotNull(parameters, "parameters");
+		checkNotNull(parameters.getTitle(), "parameters.title");
+		checkNotNull(parameters.getText(), "parameters.text");
+		
 		// Creates a text notification
 		TextNotification notification = new TextNotification() {
 			@Override
@@ -138,6 +114,9 @@ public class DesktopNotificationHandler implements NotificationHandler {
 
 	@Override
 	public void hideNotification(NotificationParameters parameters) {
+		
+		checkNotNull(parameters, "parameters");
+		
 		Notification notification = notifications.get(parameters.getId());
 
 		if (notification != null) {
@@ -172,4 +151,61 @@ public class DesktopNotificationHandler implements NotificationHandler {
 //		manager.setFadeEnabled(true);	// this is a feature under testing - it doesn't look good across all platforms
 		return manager;
 	}
+	
+	public static void main(String[] args) {
+		
+		// TODO
+		//https://github.com/spfrommer/JCommunique/wiki
+//		
+//		JCommunique also offers the following:
+//
+//		    IconUtils for reading and scaling icons from files
+//
+//		    Easy automatic Notification adjustment based on platform
+//
+//		    
+//
+//
+//JCommunique offers several Notifications and NotificationManagers. If you're not sure what these are, take a look at the API Explanation section. Of course, you can always create your own Notifications and NotificationManagers.
+//Notifications
+//
+//    TextNotification - displays a title and a subtitle with themed Fonts
+//    IconNotification - same as TextNotification, but with an additional method for setting the ImageIcon
+//    AcceptNotification - allows for user feedback via accept and decline buttons
+//    ProgressNotification - shows a progress bar to the user
+//
+//NotificationManagers
+//
+//    SimpleManager - shows Notifications in one location with optional fading
+//    QueueManager - scrolls Notifications with optional fading
+//    SlideManager - slides Notifications to their standard locations from the side of the screen
+//    SequenceManager - this queues up a number of Notifications which it will show one after another
+//
+		// TODO
+		
+		
+		NotificationHandler handler = new DesktopNotificationHandler();
+		
+		for(int i = 0 ; i < 10 ; i++) {
+			NotificationParameters parameters = new NotificationParameters(i, "Notification " + i, "Lorem ipsum");
+			
+			handler.showNotification(parameters);
+		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i = 0 ; i < 10 ; i++) {
+			NotificationParameters parameters = new NotificationParameters();
+			
+			parameters.setId(i);
+			
+			handler.hideNotification(parameters);
+		}
+		
+	}
+	
 }

@@ -23,6 +23,8 @@
  */
 package net.spookygames.gdx.notifications.desktop;
 
+import static net.spookygames.gdx.notifications.NotificationUtils.checkNotNull;
+
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
 import notify.MessageType;
@@ -36,12 +38,35 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		super();
 	}
 
+	@Override
+	public void showNotification(NotificationParameters parameters) {
+
+		checkNotNull(parameters, "parameters");
+		checkNotNull(parameters.getTitle(), "parameters.title");
+		checkNotNull(parameters.getText(), "parameters.text");
+		
+		notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
+	}
+
+	@Override
+	public void hideNotification(NotificationParameters parameters) {
+		// Not supported
+	}
+
+	protected MessageType defineMessageType(NotificationParameters parameters) {
+		Object payload = parameters.getPayload();
+		if(payload instanceof MessageType)
+			return (MessageType) payload;
+
+		return MessageType.NONE;
+	}
+
 	public static void main(String[] args) {
 		MessageType[] types = MessageType.values();
 		NotificationHandler handler = new DesktopNotificationHandler();
 
 		for (int i = 0; i < 10; i++) {
-			NotificationParameters parameters = new NotificationParameters("Notification " + i, "Lorem ipsum", i);
+			NotificationParameters parameters = new NotificationParameters(i, "Notification " + i, "Lorem ipsum");
 			parameters.setPayload(types[i % types.length]);
 			handler.showNotification(parameters);
 		}
@@ -53,28 +78,11 @@ public class DesktopNotificationHandler implements NotificationHandler {
 		}
 
 		for (int i = 0; i < 10; i++) {
-			NotificationParameters parameters = new NotificationParameters("", "", i);
+			NotificationParameters parameters = new NotificationParameters();
 			handler.hideNotification(parameters);
+
+			parameters.setId(i);
 		}
-
-	}
-
-	@Override
-	public void showNotification(NotificationParameters parameters) {
-		notifier.notify(defineMessageType(parameters), parameters.getTitle(), parameters.getText());
-	}
-
-	@Override
-	public void hideNotification(NotificationParameters parameters) {
-		// Not supported
-	}
-
-	protected MessageType defineMessageType(NotificationParameters parameters) {
-		Object payload = parameters.getPayload();
-		if (payload instanceof MessageType)
-			return (MessageType) payload;
-
-		return MessageType.NONE;
 	}
 
 }
