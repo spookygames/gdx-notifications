@@ -15,7 +15,7 @@ allprojects {
     apply plugin: "idea"
 
     group = 'net.spookygames.gdx'
-    version = '0.0.2'
+    version = '0.0.2-SNAPSHOT'
 
     ext {
         gdxVersion = '1.5.5'
