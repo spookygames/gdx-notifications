@@ -1,5 +1,6 @@
 # gdx-notifications
 [ ![Download](https://api.bintray.com/packages/spookygames/oss/gdx-notifications/images/download.svg) ](https://bintray.com/spookygames/oss/gdx-notifications/_latestVersion)
+[ ![Build Status](https://travis-ci.com/spookygames/gdx-notifications.svg?branch=master)](https://travis-ci.com/spookygames/gdx-notifications)
 
 Cross-platform notifications for libgdx.
 
