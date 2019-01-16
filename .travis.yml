@@ -21,3 +21,11 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+deploy:
+  provider: script
+  script: ./gradlew bintrayUpload
+  skip_cleanup: true # to upload artifacts created during the build
+  dry-run: false
+  on:
+    branch: master
