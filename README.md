@@ -4,8 +4,6 @@
 
 Cross-platform notifications for libgdx.
 
-Desktop support thanks to [JCommunique](https://github.com/spfrommer/JCommunique) and [java-to-OS-notify](https://github.com/wokier/java-to-OS-notify).
-
 See [here](https://github.com/SimonIT/gdx-notifications-app) for an example implementation.
 
 ## Setup
