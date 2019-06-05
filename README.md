@@ -101,7 +101,7 @@ And the base interface with two methods:
 
 ```java
 NotificationHandler handler = <your_platform-specific_handler_here>;
-handler.showNotification(new NotificationParameters("Notification for the people", "Lorem ipsum", 12));
+handler.showNotification(new NotificationParameters(12, "Notification title for the people", "Text Lorem ipsum"));
 ```
 
 ### Remove notification
@@ -112,7 +112,7 @@ NotificationHandler handler = <your_platform-specific_handler_here>;
 // You could (should!) very well get the parameters object from above
 // But it will go nice too if you create a new object
 // Only the id matters actually
-handler.hideNotification(new NotificationParameters("", "", 12));
+handler.hideNotification(new NotificationParameters(12, "", ""));
 ```
 
 ## Platform support
