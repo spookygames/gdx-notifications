@@ -14,6 +14,7 @@ Add the pretty **bold** parts into your _build.gradle_ file:
 
 <pre>
     repositories {
+        <b>jcenter()</b> <i>Only necessary if you plan to use JCommunique</i>
         <b>maven { url "http://dl.bintray.com/spookygames/oss" }</b>
     }
     
