@@ -8,12 +8,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 30
     }
 
     compileOptions {
@@ -35,9 +35,9 @@ android {
 project.archivesBaseName = "$libName-${project.name}"
 
 dependencies {
-    implementation project(':core')
-    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-    implementation "com.android.support:support-compat:28.0.0"
+    api project(':core')
+    api "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    api "androidx.core:core:1.3.2"
 }
 
 task javadoc(type: Javadoc) {
