@@ -31,7 +31,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import net.spookygames.gdx.notifications.NotificationHandler;
 import net.spookygames.gdx.notifications.NotificationParameters;
 
@@ -88,7 +88,7 @@ public class AndroidNotificationHandler implements NotificationHandler {
 
 		checkNotNull(parameters.getTitle(), "parameters.title");
 		checkNotNull(parameters.getText(), "parameters.text");
-		
+
 		builder
 			.setDefaults(Notification.DEFAULT_ALL)
 			.setContentTitle(parameters.getTitle())

@@ -62,7 +62,7 @@ public class HtmlNotificationHandler implements NotificationHandler {
 	public void hideNotification(NotificationParameters parameters) {
 		if (this.supported) {
 			for (NotificationJS notification : this.notifications) {
-				if (Integer.valueOf(notification.getTag()) == parameters.getId()) {
+				if (Integer.parseInt(notification.getTag()) == parameters.getId()) {
 					notification.close();
 					this.notifications.removeValue(notification, true);
 					break;
