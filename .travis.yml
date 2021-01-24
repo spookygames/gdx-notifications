@@ -35,3 +35,4 @@ deploy:
   dry-run: false
   on:
     branch: master
+    tags: true
