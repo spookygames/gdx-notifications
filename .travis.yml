@@ -30,7 +30,7 @@ cache:
 
 deploy:
   provider: script
-  script: ./gradlew bintrayUpload
+  script: ./gradlew bintrayUpload --no-configure-on-demand --no-parallel
   skip_cleanup: true # to upload artifacts created during the build
   dry-run: false
   on:
