@@ -1,6 +1,4 @@
 # gdx-notifications
-[ ![Download](https://api.bintray.com/packages/spookygames/oss/gdx-notifications/images/download.svg) ](https://bintray.com/spookygames/oss/gdx-notifications/_latestVersion)
-[ ![Build Status](https://travis-ci.com/spookygames/gdx-notifications.svg?branch=master)](https://travis-ci.com/spookygames/gdx-notifications)
 
 Cross-platform notifications for libgdx.
 
@@ -15,7 +13,6 @@ Add the pretty **bold** parts into your _build.gradle_ file:
 <pre>
     repositories {
         <b>jcenter()</b> <i>Only necessary if you plan to use JCommunique</i>
-        <b>maven { url "http://dl.bintray.com/spookygames/oss" }</b>
     }
     
     ...
@@ -27,9 +24,9 @@ Add the pretty **bold** parts into your _build.gradle_ file:
         dependencies {
             compile project(":core")
             ...
-            <b>compile "net.spookygames.gdx:gdx-notifications-desktop-jcommunique:0.1.0"</b> <i>for Swing notifications</i>
+            <b>compile "games.spooky.gdx:gdx-notifications-desktop-jcommunique:0.1.0"</b> <i>for Swing notifications</i>
             <i>OR</i>
-            <b>compile "net.spookygames.gdx:gdx-notifications-desktop-os:0.1.0"</b> <i>for native notifications</i>
+            <b>compile "games.spooky.gdx:gdx-notifications-desktop-os:0.1.0"</b> <i>for native notifications</i>
         }
     }
     
@@ -40,7 +37,7 @@ Add the pretty **bold** parts into your _build.gradle_ file:
         dependencies {
             compile project(":core")
             ...
-            <b>compile "net.spookygames.gdx:gdx-notifications-android:0.1.0"</b>
+            <b>compile "games.spooky.gdx:gdx-notifications-android:0.1.0"</b>
         }
     }
     
@@ -52,13 +49,13 @@ Add the pretty **bold** parts into your _build.gradle_ file:
             compile project(":core")
             ...
             
-            <b>compile "net.spookygames.gdx:gdx-notifications-html-gwt:0.1.0"</b>
-            <b>compile "net.spookygames.gdx:gdx-notifications:0.1.0:sources"</b>
-            <b>compile "net.spookygames.gdx:gdx-notifications-html-gwt:0.1.0:sources"</b> <i>for gwt notifications</i>
+            <b>compile "games.spooky.gdx:gdx-notifications-html-gwt:0.1.0"</b>
+            <b>compile "games.spooky.gdx:gdx-notifications:0.1.0:sources"</b>
+            <b>compile "games.spooky.gdx:gdx-notifications-html-gwt:0.1.0:sources"</b> <i>for gwt notifications</i>
             <i>OR</i>
-            <b>compile "net.spookygames.gdx:gdx-notifications-html-browser:0.1.0"</b>
-            <b>compile "net.spookygames.gdx:gdx-notifications:0.1.0:sources"</b>
-            <b>compile "net.spookygames.gdx:gdx-notifications-html-browser:0.1.0:sources"</b> <i>for browser notifications</i>
+            <b>compile "games.spooky.gdx:gdx-notifications-html-browser:0.1.0"</b>
+            <b>compile "games.spooky.gdx:gdx-notifications:0.1.0:sources"</b>
+            <b>compile "games.spooky.gdx:gdx-notifications-html-browser:0.1.0:sources"</b> <i>for browser notifications</i>
         }
     }
     
@@ -68,7 +65,7 @@ Add the pretty **bold** parts into your _build.gradle_ file:
         
         dependencies {
             ...
-            <b>compile "net.spookygames.gdx:gdx-notifications:0.1.0"</b>
+            <b>compile "games.spooky.gdx:gdx-notifications:0.1.0"</b>
         }
     }
 </pre>

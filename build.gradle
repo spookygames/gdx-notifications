@@ -10,11 +10,13 @@ buildscript {
     }
 }
 
-allprojects {
-    apply plugin: 'eclipse'
-    apply plugin: "idea"
+plugins {
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+}
 
-    group = 'net.spookygames.gdx'
+allprojects {
+
+    group = 'games.spooky.gdx'
     version = '0.1.0'
 
     ext {
@@ -30,9 +32,7 @@ allprojects {
 }
 
 subprojects {
-    eclipse {
-        project {
-            name = "$libName-$name"
-        }
-    }
+    apply from: "$rootDir/gradle/license.gradle"
 }
+
+apply from: "${rootDir}/gradle/publish-root.gradle"

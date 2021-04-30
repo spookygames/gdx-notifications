@@ -1,3 +1,4 @@
+
 apply plugin: 'java-library'
 
 sourceCompatibility = 1.6
@@ -5,49 +6,12 @@ targetCompatibility = 1.6
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = ["src/main/java"]
-sourceSets.main.resources.srcDirs = ["src/main/resources"]
-
 dependencies {
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
 }
 
-apply plugin: 'maven-publish'
-
 archivesBaseName = "$libName"
 
-// Javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-// Sources
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId "$libName"
-            from components.java
-
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
-
-apply from: '../license.gradle'
 license.includes(["**/*.java"])
 
-apply from: '../publish.gradle'
-bintray.publications = ['maven']
-bintrayUpload.dependsOn publishToMavenLocal
+apply from: "${rootProject.projectDir}/gradle/publish-module.gradle"
