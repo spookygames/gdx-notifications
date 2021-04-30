@@ -73,7 +73,7 @@ Add the pretty **bold** parts into your _build.gradle_ file:
 
 Add 
 
-`<inherits name="net.spookygames.gdx.notifications.gdx_notifications_gwt"/>`
+`<inherits name="games.spooky.gdx.notifications.gdx_notifications_gwt"/>`
 
 after
 

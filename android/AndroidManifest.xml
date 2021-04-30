@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-        package="net.spookygames.gdx.notifications.android">
+        package="games.spooky.gdx.notifications.android">
 </manifest>
