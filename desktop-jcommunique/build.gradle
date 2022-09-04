@@ -9,7 +9,7 @@ dependencies {
     api project(':core')
     api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-    api 'org.jcommunique:JCommunique:2.0.0'
+    api 'com.github.lespaul361:JCommunique:2.0.0'
 }
 
 archivesBaseName = "$libName-${project.name}"
